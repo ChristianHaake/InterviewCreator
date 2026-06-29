@@ -1,7 +1,3 @@
-Die Integration von Mehrsprachigkeit (i18n – Internationalization) fügt sich gut in die browserbasierte Architektur ein. Da keine Backend-Ressourcen vorhanden sind, wird die Lokalisierung vollständig im Frontend über statische Wörterbücher gelöst.
-
-Hier ist die Anpassung des Coding-Plans, um DE, EN, FR, ES (Spanisch) und NL zu unterstützen.
-
 ## Architektur-Update für Mehrsprachigkeit
 
 * **Wörterbücher (Dictionaries):** Statische JSON-Dateien oder ein globales JavaScript-Objekt für jede Sprache (`de.json`, `en.json`, `fr.json`, `es.json`, `nl.json`).
