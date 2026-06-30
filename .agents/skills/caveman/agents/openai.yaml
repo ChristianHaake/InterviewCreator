@@ -1,0 +1,4 @@
+interface:
+  display_name: "Caveman"
+  short_description: "Use terse, technically precise communication"
+  default_prompt: "Use $caveman lite for concise technical communication."

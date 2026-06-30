@@ -1,0 +1,230 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  height: 100%;
+}
+
+.editorPanel,
+.previewPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-width: 50%;
+}
+
+.panelHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.panelKicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.panelHeading h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text);
+}
+
+.panelHeading p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.iconButton:hover {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.editorContent {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.previewStage {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.liveIndicator span {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.actionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.actionGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actionGroup > span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-right: 0.5rem;
+}
+
+.actionButtonSecondary,
+.actionButtonPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.actionButtonSecondary {
+  background-color: var(--app-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.actionButtonSecondary:hover:not(:disabled) {
+  background-color: var(--surface);
+  border-color: var(--text-muted);
+}
+
+.actionButtonPrimary {
+  background-color: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+}
+
+.actionButtonPrimary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.actionButtonSecondary:disabled,
+.actionButtonPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile Toggle */
+.mobileViewToggle {
+  display: none;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.mobileViewToggle button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mobileViewToggle button.activeTab {
+  background-color: var(--app-bg);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+  .mobileViewToggle {
+    display: flex;
+  }
+
+  .editorPanel,
+  .previewPanel {
+    display: none;
+    max-width: 100%;
+  }
+
+  .mobilePanelActive {
+    display: flex;
+  }
+
+  .actionBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .actionGroup {
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cavecrew"
+  short_description: "Delegate focused work with compressed results"
+  default_prompt: "Use $cavecrew to delegate suitable investigation, editing, or review work."

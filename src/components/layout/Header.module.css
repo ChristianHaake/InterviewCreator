@@ -1,0 +1,97 @@
+.header {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+.logo:hover {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+.tagline {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .tagline {
+    display: inline;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.privacyIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--success);
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: var(--success-soft);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 450px) {
+  .privacyIndicator span {
+    display: none;
+  }
+  .privacyIndicator {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.languageSwitch {
+  display: flex;
+  background-color: var(--app-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.languageSwitch button {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.languageSwitch button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.languageSwitch button.activeLang {
+  background-color: var(--primary);
+  color: white;
+}
