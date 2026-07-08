@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "typecheck": "tsc -b",
-    "test": "echo \"No test specified\"",
+    "test": "vitest run",
     "verify": "npm run typecheck && npm run lint && npm run build",
     "preview": "vite preview"
   },
@@ -34,6 +34,7 @@
     "oxlint": "^1.69.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.0",
+    "vitest": "^4.0.16",
     "vite-plugin-pwa": "^1.3.0"
   }
 }

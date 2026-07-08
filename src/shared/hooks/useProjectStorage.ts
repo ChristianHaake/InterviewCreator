@@ -1,11 +1,29 @@
+import { MAX_PROJECT_FILE_BYTES, parseProjectJson, PROJECT_SCHEMA_VERSION } from "../../domain/projectSchema";
 import type { InterviewState } from "../../domain/types";
-import { defaultInterviewState } from "../../domain/types";
 import { useTranslation } from "../../i18n";
 
-export function useProjectStorage(state: InterviewState, setState: (state: InterviewState) => void) {
+function downloadTextFile(contents: string, filename: string, type: string) {
+  const blob = new Blob([contents], { type });
+  const url = URL.createObjectURL(blob);
+  const downloadAnchorNode = document.createElement("a");
+  downloadAnchorNode.href = url;
+  downloadAnchorNode.download = filename;
+  document.body.appendChild(downloadAnchorNode);
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+  URL.revokeObjectURL(url);
+}
+
+function safeFilename(title: string) {
+  return title.replace(/[^a-z0-9]/gi, "_").toLowerCase() || "interview";
+}
+
+export function useProjectStorage(state: InterviewState | null, setState: (state: InterviewState) => void) {
   const { t } = useTranslation();
 
   function handleDownload() {
+    if (!state) return;
+
     const totalTime = [
       ...(state.phases?.intro || []),
       ...(state.phases?.main || []),
@@ -14,21 +32,21 @@ export function useProjectStorage(state: InterviewState, setState: (state: Inter
     
     const exportData = {
       ...state,
+      schemaVersion: PROJECT_SCHEMA_VERSION,
       total_estimated_time: totalTime,
       updated_at: new Date().toISOString()
     };
 
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    const filename = state.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'interview';
-    downloadAnchorNode.setAttribute("download", `${filename}.json`);
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+    downloadTextFile(
+      JSON.stringify(exportData, null, 2),
+      `${safeFilename(state.title)}.json`,
+      "application/json;charset=utf-8",
+    );
   }
 
   function handleExportMarkdown() {
+    if (!state) return;
+
     let md = `# ${state.title || t("preview.untitled")}\n\n`;
     if (state.partner) md += `**${t("preview.partnerLabel")}** ${state.partner}\n\n`;
 
@@ -80,42 +98,31 @@ export function useProjectStorage(state: InterviewState, setState: (state: Inter
       });
     }
 
-    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(md);
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    const filename = state.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'interview';
-    downloadAnchorNode.setAttribute("download", `${filename}.md`);
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+    downloadTextFile(md, `${safeFilename(state.title)}.md`, "text/markdown;charset=utf-8");
   }
 
   function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_PROJECT_FILE_BYTES) {
+      alert(t("storage.fileTooLarge"));
+      event.target.value = "";
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      try {
-        const json = JSON.parse(e.target?.result as string);
-        if (json && typeof json.title === 'string' && (Array.isArray(json.questions) || typeof json.phases === 'object')) {
-          if (json.icebreakers || json.questions) {
-            json.phases = {
-              intro: json.icebreakers || [],
-              main: json.questions || [],
-              outro: []
-            };
-            delete json.icebreakers;
-            delete json.questions;
-          }
-          setState({ ...defaultInterviewState, ...json });
-        } else {
-          alert(t("storage.invalidFormat"));
-        }
-      } catch (error) {
+      const content = typeof e.target?.result === "string" ? e.target.result : "";
+      const result = parseProjectJson(content);
+      if (result.ok) {
+        setState(result.state);
+      } else if (result.reason === "invalid-json") {
         alert(t("storage.readError"));
+      } else {
+        alert(t("storage.invalidFormat"));
       }
     };
+    reader.onerror = () => alert(t("storage.readError"));
     reader.readAsText(file);
     
     // Reset input

@@ -12,7 +12,7 @@ export function Footer() {
         <span className={styles.localNotice}>{t("footer.localData")}</span>
         
         <div className={styles.footerRight}>
-          <nav className={styles.nav} aria-label="Footer Navigation">
+          <nav className={styles.nav} aria-label={t("footer.navigation")}>
             <Link to="/hilfe">{t("footer.help")}</Link>
             <Link to="/ueber" className={styles.optionalLink}>{t("footer.about")}</Link>
             <Link to="/datenschutz">{t("footer.privacy")}</Link>
@@ -30,7 +30,7 @@ export function Footer() {
           </a>
           
           <a
-            aria-label="GitHub Repository"
+            aria-label={t("footer.repository")}
             className={styles.githubLink}
             href="https://github.com/ChristianHaake/InterviewCreator"
             rel="noreferrer"

@@ -30,7 +30,7 @@ export const InterviewPreview = memo(function InterviewPreview({ state }: Props)
       
       {q.notes && (
         <div className={styles.notesSection}>
-          <strong>Notizen:</strong>
+          <strong>{t("preview.notesLabel")}</strong>
           <p>{q.notes}</p>
         </div>
       )}

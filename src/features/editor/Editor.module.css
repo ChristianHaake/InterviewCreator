@@ -71,6 +71,17 @@
   margin-top: 0.5rem;
 }
 
+.inlineInputGroup {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inlineInputGroup input[type="number"] {
+  width: 4rem;
+}
+
 .priorityGroup label {
   font-size: 0.875rem;
   font-weight: 600;
@@ -131,6 +142,13 @@
   margin-bottom: 0;
 }
 
+.questionActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.iconButton,
 .deleteButton {
   background: none;
   border: none;
@@ -142,6 +160,16 @@
   align-items: flex-start;
   transition: color 0.15s ease, background-color 0.15s ease;
   height: fit-content;
+}
+
+.iconButton:hover:not(:disabled) {
+  color: var(--text);
+  background-color: var(--app-bg);
+}
+
+.iconButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .deleteButton:hover {
@@ -222,4 +250,27 @@
   border-radius: var(--radius-sm);
   background-color: var(--app-bg);
   color: var(--text);
+}
+
+@media (max-width: 520px) {
+  .metadataPanel,
+  .questionListPanel {
+    padding: 1rem;
+  }
+
+  .listHeader,
+  .questionItem,
+  .priorityGroup,
+  .sourceItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .questionActions {
+    flex-direction: row;
+  }
+
+  .dragHandle {
+    align-self: flex-start;
+  }
 }

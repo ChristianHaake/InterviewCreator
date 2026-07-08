@@ -9,7 +9,12 @@ Last reviewed: `2026-06-30`
 
 ## Exceptions
 
-No exceptions are currently documented.
+No technical exceptions are currently documented.
+
+Open release content:
+
+- Help, privacy, imprint, and about pages still contain operator-facing template text.
+- These pages must be finalized before a public release claim.
 
 Use this format for every exception:
 
@@ -23,5 +28,6 @@ Review date:
 
 ## App-specific decisions
 
-- Add product or architecture decisions that intentionally vary within the
-  freedom allowed by the standard.
+- Editable project files use `.json` with `schemaVersion: 1`.
+- Autosave uses IndexedDB and is treated as recovery, not as a replacement for explicit export.
+- Markdown export is one-way and intended for handout/print workflows.

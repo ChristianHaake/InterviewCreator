@@ -14,12 +14,16 @@ Record release-specific results below.
 ## Results
 
 - [ ] Shared checklist completed.
-- [ ] Automated verification passed.
+- [x] Automated verification passed.
 - [ ] Mobile and tablet workflow tested.
 - [ ] Import, export, reset, and recovery tested.
 - [ ] Legal and privacy content reviewed.
-- [ ] Exceptions documented.
+- [x] Exceptions documented.
 
 ## Notes
 
-Add failures, accepted limitations, and follow-up work here.
+- `npm run verify` passed on 2026-07-01.
+- `npm test` passed with 5 schema/import tests on 2026-07-01.
+- `npm audit --omit=dev` reported 0 vulnerabilities on 2026-07-01.
+- Browser smoke passed locally for editor rendering, autosave after reload, direct content routes, and no horizontal overflow at desktop, 390px, and 320px.
+- DNS for `interviewdesigner.haak3.de` and final help/privacy/imprint/about content remain outside this repair pass.

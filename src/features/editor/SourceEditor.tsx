@@ -45,6 +45,7 @@ export const SourceEditor = memo(function SourceEditor({ sources, onChange }: Pr
                 value={item.title}
                 onChange={(e) => handleUpdate(item.id, { title: e.target.value })}
                 placeholder={t("editor.sourceTitlePlaceholder")}
+                aria-label={t("editor.sourceTitleLabel")}
                 className={styles.sourceInput}
               />
               <input
@@ -52,6 +53,7 @@ export const SourceEditor = memo(function SourceEditor({ sources, onChange }: Pr
                 value={item.url}
                 onChange={(e) => handleUpdate(item.id, { url: e.target.value })}
                 placeholder={t("editor.sourceUrlPlaceholder")}
+                aria-label={t("editor.sourceUrlLabel")}
                 className={styles.sourceInput}
               />
             </div>
@@ -59,8 +61,8 @@ export const SourceEditor = memo(function SourceEditor({ sources, onChange }: Pr
               className={styles.deleteButton}
               onClick={() => handleDelete(item.id)}
               type="button"
-              title="Entfernen"
-              aria-label="Quelle entfernen"
+              title={t("editor.deleteSource")}
+              aria-label={t("editor.deleteSource")}
             >
               <Trash2 size={18} />
             </button>
