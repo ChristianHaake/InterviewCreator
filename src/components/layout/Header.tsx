@@ -23,10 +23,10 @@ export function Header() {
         <div className={styles.controls}>
           <div className={styles.privacyIndicator} title={t("footer.localData")}>
             <Check size={16} aria-hidden="true" />
-            <span>Lokale Verarbeitung</span>
+            <span>{t("footer.localDataShort")}</span>
           </div>
           
-          <div className={styles.languageSwitch} aria-label="Sprache auswählen">
+          <div className={styles.languageSwitch} aria-label={t("header.languageSelect")}>
             {locales.map(l => (
               <button
                 key={l}

@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { defaultInterviewState } from "../../domain/types";
+import { parseInterviewProject, STORAGE_KEY } from "../../domain/projectSchema";
+import { createDefaultInterviewState } from "../../domain/types";
 import type { InterviewState } from "../../domain/types";
 import { get, set, del } from "idb-keyval";
-
-const STORAGE_KEY = "interview-creator-session";
+import { useTranslation } from "../../i18n";
 
 export function useSessionPersistence() {
   const [state, setState] = useState<InterviewState | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function load() {
@@ -18,24 +19,20 @@ export function useSessionPersistence() {
             stored = JSON.parse(legacy);
           }
         }
-        
+
         if (stored) {
-          if (stored.icebreakers || stored.questions) {
-            stored.phases = {
-              intro: stored.icebreakers || [],
-              main: stored.questions || [],
-              outro: []
-            };
-            delete stored.icebreakers;
-            delete stored.questions;
+          const result = parseInterviewProject(stored);
+          if (result.ok) {
+            setState(result.state);
+          } else {
+            setState(createDefaultInterviewState());
           }
-          setState({ ...defaultInterviewState, ...stored });
         } else {
-          setState(defaultInterviewState);
+          setState(createDefaultInterviewState());
         }
       } catch (err) {
         console.error("Failed to load state", err);
-        setState(defaultInterviewState);
+        setState(createDefaultInterviewState());
       }
     }
     load();
@@ -56,10 +53,10 @@ export function useSessionPersistence() {
   }, [state]);
 
   function clearSession() {
-    if (window.confirm("Bist du sicher, dass du das aktuelle Projekt löschen möchtest? Alle nicht exportierten Daten gehen verloren.")) {
+    if (window.confirm(t("home.resetConfirm"))) {
       del(STORAGE_KEY).catch(console.error);
       localStorage.removeItem(STORAGE_KEY);
-      setState(defaultInterviewState);
+      setState(createDefaultInterviewState());
     }
   }
 

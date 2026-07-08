@@ -3,12 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft } from 'lucide-react';
 import styles from './ContentPage.module.css';
+import { useTranslation } from '../i18n';
 
 // Load all markdown files from the content directory as raw strings
 const markdownFiles = import.meta.glob('../../content/*.md', { query: '?raw', import: 'default' });
 
 export function ContentPage() {
   const { pageId } = useParams<{ pageId: string }>();
+  const { t } = useTranslation();
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -27,7 +29,7 @@ export function ContentPage() {
         } else {
           setError(true);
         }
-      } catch (err) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);
@@ -44,16 +46,16 @@ export function ContentPage() {
       <div className={styles.backLink}>
         <Link to="/">
           <ArrowLeft size={16} />
-          Zurück zum Editor
+          {t("content.backToEditor")}
         </Link>
       </div>
 
       <article className={styles.article}>
-        {loading && <p>Lade Inhalt...</p>}
+        {loading && <p>{t("content.loading")}</p>}
         {error && (
           <div>
-            <h1>Seite nicht gefunden</h1>
-            <p>Die angeforderte Seite konnte nicht geladen werden.</p>
+            <h1>{t("content.notFoundTitle")}</h1>
+            <p>{t("content.notFoundBody")}</p>
           </div>
         )}
         {!loading && !error && (

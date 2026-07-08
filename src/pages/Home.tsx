@@ -14,12 +14,12 @@ export function Home() {
   const { state, setState, clearSession } = useSessionPersistence();
   const { t } = useTranslation();
 
-  const { handleDownload, handleExportMarkdown, handleUpload } = useProjectStorage(state || undefined as any, setState as any); // will fix this next
+  const { handleDownload, handleExportMarkdown, handleUpload } = useProjectStorage(state, setState);
   const [mobileView, setMobileView] = useState<"editor" | "preview">("editor");
   const configInputRef = useRef<HTMLInputElement>(null);
 
   if (!state) {
-    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text-muted)' }}>Lade Projekt...</div>;
+    return <div className={styles.loadingState}>{t("home.loadingProject")}</div>;
   }
 
   const handlePrint = () => {
@@ -28,7 +28,7 @@ export function Home() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.mobileViewToggle} aria-label="Ansicht umschalten">
+      <div className={styles.mobileViewToggle} aria-label={t("home.switchView")}>
         <button
           className={mobileView === "editor" ? styles.activeTab : ""}
           onClick={() => setMobileView("editor")}
@@ -53,7 +53,7 @@ export function Home() {
           className={`${styles.editorPanel} ${
             mobileView === "editor" ? styles.mobilePanelActive : ""
           }`}
-          aria-label="Editor"
+          aria-label={t("tab.editor")}
         >
           <div className={styles.panelHeading}>
             <div>
@@ -67,7 +67,7 @@ export function Home() {
               type="button"
             >
               <RotateCcw aria-hidden="true" size={18} />
-              <span className="visually-hidden">Zurücksetzen</span>
+              <span className="visually-hidden">{t("home.resetProject")}</span>
             </button>
           </div>
 
@@ -120,7 +120,7 @@ export function Home() {
           className={`${styles.previewPanel} ${
             mobileView === "preview" ? styles.mobilePanelActive : ""
           }`}
-          aria-label="Vorschau"
+          aria-label={t("tab.preview")}
         >
           <div className={styles.panelHeading}>
             <div>
@@ -150,7 +150,6 @@ export function Home() {
               <input
                 accept=".json,application/json"
                 className="visually-hidden"
-                style={{ display: 'none' }}
                 onChange={handleUpload}
                 ref={configInputRef}
                 type="file"

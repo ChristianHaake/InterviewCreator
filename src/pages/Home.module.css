@@ -9,6 +9,14 @@
   height: 100%;
 }
 
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: var(--text-muted);
+}
+
 .workspace {
   display: flex;
   flex: 1;
@@ -22,6 +30,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  min-width: 0;
   max-width: 50%;
 }
 
@@ -112,6 +121,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-top: 1rem;
   padding: 1rem;
   background-color: var(--surface);
@@ -123,6 +133,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .actionGroup > span {

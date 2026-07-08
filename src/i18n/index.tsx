@@ -9,7 +9,7 @@ import { nl } from "./nl";
 
 type Params = Record<string, string | number>;
 
-const dictionaries = { de, en, fr, es, nl };
+const dictionaries: Record<Locale, Partial<Record<TranslationKey, string>>> = { de, en, fr, es, nl };
 const storageKey = "interview-creator-locale";
 
 function detectLocale(): Locale {
@@ -23,7 +23,7 @@ function detectLocale(): Locale {
 }
 
 function translate(locale: Locale, key: TranslationKey, params?: Params) {
-  let value = (dictionaries[locale] as any)[key] || dictionaries.de[key];
+  let value = dictionaries[locale][key] ?? de[key];
   if (params) {
     Object.entries(params).forEach(([name, replacement]) => {
       value = value.replaceAll(`{${name}}`, String(replacement));

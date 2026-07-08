@@ -44,14 +44,15 @@ export const ChecklistEditor = memo(function ChecklistEditor({ checklist, onChan
               value={item.text}
               onChange={(e) => handleUpdate(item.id, e.target.value)}
               placeholder={t("editor.checklistPlaceholder")}
+              aria-label={t("editor.checklistItemLabel")}
               className={styles.checklistInput}
             />
             <button
               className={styles.deleteButton}
               onClick={() => handleDelete(item.id)}
               type="button"
-              title="Entfernen"
-              aria-label="Punkt entfernen"
+              title={t("editor.deleteChecklistItem")}
+              aria-label={t("editor.deleteChecklistItem")}
             >
               <Trash2 size={18} />
             </button>

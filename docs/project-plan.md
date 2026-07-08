@@ -98,11 +98,12 @@ Als Lernende möchte ich ein Interview mit Fragen und Notizen digital planen, di
 
 Das JSON-Datenmodell für den Export und die lokale Speicherung:
 
-```json
-{
+  ```json
+  {
+  "schemaVersion": 1,
   "id": "uuid",
   "title": "Titel des Projekts",
-  "interviewee": "Name der Person",
+  "partner": "Name der Person",
   "created_at": "2026-06-30T10:00:00Z",
   "updated_at": "2026-06-30T10:30:00Z",
   "total_estimated_time": 15,
@@ -110,7 +111,7 @@ Das JSON-Datenmodell für den Export und die lokale Speicherung:
     "intro": [
       {
         "id": "q-1",
-        "question": "Fragetext",
+        "text": "Fragetext",
         "notes": "Stichpunkte",
         "estimated_minutes": 2,
         "is_backup": false
@@ -118,7 +119,9 @@ Das JSON-Datenmodell für den Export und die lokale Speicherung:
     ],
     "main": [],
     "outro": []
-  }
+  },
+  "checklist": [],
+  "sources": []
 }
 
 ```

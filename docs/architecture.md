@@ -9,51 +9,65 @@
 
 ## Stack
 
-Document the chosen framework, build system, major dependencies, and why they
-fit the product.
+- React 19 with TypeScript for the interactive editor and preview workflow.
+- Vite builds the static application and PWA assets.
+- React Router provides direct routes for the editor and bundled content pages.
+- `idb-keyval` stores the autosaved interview project in IndexedDB.
+- `@hello-pangea/dnd` provides pointer and keyboard drag-and-drop behavior.
+- `lucide-react` provides interface icons.
+- `react-markdown` renders bundled Markdown content without enabling raw HTML.
 
 ## Source structure
 
-Document the responsibility of each top-level source directory.
+- `src/domain/`: project data types, schema constants, runtime validation, and legacy migration.
+- `src/features/editor/`: project metadata, checklist, source, and question editing controls.
+- `src/features/preview/`: printable interview preview.
+- `src/shared/hooks/`: persistence and import/export hooks.
+- `src/components/layout/`: app shell, header, footer, and navigation.
+- `src/pages/`: editor home page and bundled Markdown content page.
+- `src/i18n/`: static UI dictionaries and locale provider.
 
 ## State
 
-Document:
-
-- in-memory state ownership;
-- persisted state;
-- storage keys;
-- schema versions;
-- migrations;
-- reset behavior.
+- In-memory state is owned by `useSessionPersistence` and passed into editor, preview, and storage hooks.
+- Project autosave is stored in IndexedDB under `interview-creator-session`.
+- Locale preference is stored in `localStorage` under `interview-creator-locale`.
+- Current project schema version: `1`.
+- Legacy migration accepts older `icebreakers`, `questions`, `question`, and `interviewee` fields and normalizes them to `phases`, `text`, and `partner`.
+- Reset deletes the IndexedDB project entry and legacy localStorage entry before creating a fresh default project.
 
 ## Project files
 
-If the app imports or exports editable projects, document:
-
-- file extension and media type;
-- schema version;
-- validation and migration;
-- file, image, entry-count, and uncompressed-size limits;
-- behavior when import fails.
+- File extension: `.json`.
+- Media type: `application/json`.
+- Schema version: `schemaVersion: 1`.
+- Import validates parsed JSON at runtime before replacing state.
+- Unsupported future schema versions are rejected.
+- Maximum project file size: 512 KiB.
+- Maximum imported questions per phase: 100.
+- Maximum checklist items: 100.
+- Maximum sources: 50.
+- Maximum text field length: 5000 characters.
+- Failed imports preserve the current project.
 
 ## Network and privacy
 
-List every production network destination and its purpose. State whether
-user-created content leaves the device.
+- Core editing, autosave, import, export, and preview run in the browser.
+- User-created interview content is not sent to an application backend.
+- Production network destinations are limited to static app assets from the hosting origin plus user-initiated external links.
+- Hosting-provider request metadata may be processed by Cloudflare Pages and must be described in the privacy page before release.
 
 ## Deployment
 
-Document:
-
-- Cloudflare product used;
-- build command;
-- output directory;
-- SPA fallback behavior;
-- security headers;
-- cache policy.
+- Cloudflare Pages static assets.
+- Build command: `npm run build`.
+- Output directory: `dist`.
+- SPA fallback: configured through `wrangler.jsonc` with `not_found_handling: single-page-application`.
+- Security headers are defined in `public/_headers`.
+- HTML and route fallbacks revalidate. Fingerprinted assets are cached immutably for one year.
 
 ## Decisions and exceptions
 
-Record significant architecture decisions and deviations from the shared
-standard. Link to `standard-conformance.md`.
+- Project export remains JSON rather than a custom extension for the current MVP.
+- Markdown export is one-way and not an editable project import format.
+- See `standard-conformance.md` for local standard status.

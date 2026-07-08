@@ -43,6 +43,16 @@ export const QuestionList = memo(function QuestionList({ title, droppableId, emp
     onChange(questions.filter((q) => q.id !== id));
   };
 
+  const handleMove = (index: number, direction: -1 | 1) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= questions.length) return;
+
+    const newQuestions = Array.from(questions);
+    const [moved] = newQuestions.splice(index, 1);
+    newQuestions.splice(nextIndex, 0, moved);
+    onChange(newQuestions);
+  };
+
   const handleAdd = () => {
     const newId = crypto.randomUUID();
     onChange([...questions, { id: newId, text: "", notes: "", estimated_minutes: 2, is_backup: false } as Question]);
@@ -76,6 +86,10 @@ export const QuestionList = memo(function QuestionList({ title, droppableId, emp
                   index={index}
                   onUpdate={(updates) => handleUpdate(q.id, updates)}
                   onDelete={() => handleDelete(q.id)}
+                  onMoveUp={() => handleMove(index, -1)}
+                  onMoveDown={() => handleMove(index, 1)}
+                  canMoveUp={index > 0}
+                  canMoveDown={index < questions.length - 1}
                 />
               ))}
               {provided.placeholder}
