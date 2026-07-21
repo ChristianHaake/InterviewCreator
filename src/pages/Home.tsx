@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { DragDropContext } from "@hello-pangea/dnd";
+import type { DropResult } from "@hello-pangea/dnd";
 import { FileDown, FileUp, Printer, RotateCcw } from "lucide-react";
 import { useSessionPersistence } from "../shared/hooks/useSessionPersistence";
 import { useProjectStorage } from "../shared/hooks/useProjectStorage";
@@ -7,8 +9,16 @@ import { ChecklistEditor } from "../features/editor/ChecklistEditor";
 import { SourceEditor } from "../features/editor/SourceEditor";
 import { QuestionList } from "../features/editor/QuestionList";
 import { InterviewPreview } from "../features/preview/InterviewPreview";
+import { moveQuestion } from "../domain/projectSchema";
+import type { InterviewPhases } from "../domain/types";
 import styles from "./Home.module.css";
 import { useTranslation } from "../i18n";
+
+const droppablePhase: Record<string, keyof InterviewPhases> = {
+  "intro-list": "intro",
+  "main-list": "main",
+  "outro-list": "outro",
+};
 
 export function Home() {
   const { state, setState, clearSession } = useSessionPersistence();
@@ -24,6 +34,27 @@ export function Home() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const sourcePhase = droppablePhase[result.source.droppableId];
+    const destinationPhase = droppablePhase[result.destination.droppableId];
+    if (!sourcePhase || !destinationPhase) return;
+
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+    if (sourcePhase === destinationPhase && sourceIndex === destinationIndex) return;
+
+    setState({
+      ...state,
+      phases: moveQuestion(
+        state.phases,
+        { phase: sourcePhase, index: sourceIndex },
+        { phase: destinationPhase, index: destinationIndex },
+      ),
+    });
   };
 
   return (
@@ -75,8 +106,8 @@ export function Home() {
             <ProjectMetadata
               title={state.title}
               partner={state.partner}
-              onTitleChange={(t) => setState({ ...state, title: t })}
-              onPartnerChange={(p) => setState({ ...state, partner: p })}
+              onTitleChange={(value) => setState({ ...state, title: value })}
+              onPartnerChange={(value) => setState({ ...state, partner: value })}
             />
 
             <ChecklistEditor
@@ -84,29 +115,31 @@ export function Home() {
               onChange={(cl) => setState({ ...state, checklist: cl })}
             />
 
-            <QuestionList
-              title={t("editor.introTitle")}
-              droppableId="intro-list"
-              emptyMessage={t("editor.introEmpty")}
-              questions={state.phases.intro}
-              onChange={(qs) => setState({ ...state, phases: { ...state.phases, intro: qs } })}
-            />
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <QuestionList
+                title={t("editor.introTitle")}
+                droppableId="intro-list"
+                emptyMessage={t("editor.introEmpty")}
+                questions={state.phases.intro}
+                onChange={(qs) => setState({ ...state, phases: { ...state.phases, intro: qs } })}
+              />
 
-            <QuestionList
-              title={t("editor.mainTitle")}
-              droppableId="main-list"
-              emptyMessage={t("editor.mainEmpty")}
-              questions={state.phases.main}
-              onChange={(qs) => setState({ ...state, phases: { ...state.phases, main: qs } })}
-            />
+              <QuestionList
+                title={t("editor.mainTitle")}
+                droppableId="main-list"
+                emptyMessage={t("editor.mainEmpty")}
+                questions={state.phases.main}
+                onChange={(qs) => setState({ ...state, phases: { ...state.phases, main: qs } })}
+              />
 
-            <QuestionList
-              title={t("editor.outroTitle")}
-              droppableId="outro-list"
-              emptyMessage={t("editor.outroEmpty")}
-              questions={state.phases.outro}
-              onChange={(qs) => setState({ ...state, phases: { ...state.phases, outro: qs } })}
-            />
+              <QuestionList
+                title={t("editor.outroTitle")}
+                droppableId="outro-list"
+                emptyMessage={t("editor.outroEmpty")}
+                questions={state.phases.outro}
+                onChange={(qs) => setState({ ...state, phases: { ...state.phases, outro: qs } })}
+              />
+            </DragDropContext>
 
             <SourceEditor
               sources={state.sources || []}
@@ -135,55 +168,55 @@ export function Home() {
           <div className={styles.previewStage}>
             <InterviewPreview state={state} />
           </div>
-
-          <div className={styles.actionBar}>
-            <div className={styles.actionGroup}>
-              <span>{t("home.project")}</span>
-              <button
-                className={styles.actionButtonSecondary}
-                onClick={() => configInputRef.current?.click()}
-                type="button"
-              >
-                <FileUp aria-hidden="true" size={17} />
-                {t("home.load")}
-              </button>
-              <input
-                accept=".json,application/json"
-                className="visually-hidden"
-                onChange={handleUpload}
-                ref={configInputRef}
-                type="file"
-              />
-              <button
-                className={styles.actionButtonSecondary}
-                onClick={handleDownload}
-                type="button"
-              >
-                <FileDown aria-hidden="true" size={17} />
-                {t("home.save")}
-              </button>
-            </div>
-            <div className={styles.actionGroup}>
-              <span>{t("home.export")}</span>
-              <button
-                className={styles.actionButtonSecondary}
-                onClick={handleExportMarkdown}
-                type="button"
-              >
-                <FileDown aria-hidden="true" size={17} />
-                Export (MD)
-              </button>
-              <button
-                className={styles.actionButtonPrimary}
-                onClick={handlePrint}
-                type="button"
-              >
-                <Printer aria-hidden="true" size={17} />
-                {t("home.print")}
-              </button>
-            </div>
-          </div>
         </section>
+      </div>
+
+      <div className={styles.actionBar}>
+        <div className={styles.actionGroup}>
+          <span>{t("home.project")}</span>
+          <button
+            className={styles.actionButtonSecondary}
+            onClick={() => configInputRef.current?.click()}
+            type="button"
+          >
+            <FileUp aria-hidden="true" size={17} />
+            {t("home.load")}
+          </button>
+          <input
+            accept=".json,application/json"
+            className="visually-hidden"
+            onChange={handleUpload}
+            ref={configInputRef}
+            type="file"
+          />
+          <button
+            className={styles.actionButtonSecondary}
+            onClick={handleDownload}
+            type="button"
+          >
+            <FileDown aria-hidden="true" size={17} />
+            {t("home.save")}
+          </button>
+        </div>
+        <div className={styles.actionGroup}>
+          <span>{t("home.export")}</span>
+          <button
+            className={styles.actionButtonSecondary}
+            onClick={handleExportMarkdown}
+            type="button"
+          >
+            <FileDown aria-hidden="true" size={17} />
+            {t("home.exportMd")}
+          </button>
+          <button
+            className={styles.actionButtonPrimary}
+            onClick={handlePrint}
+            type="button"
+          >
+            <Printer aria-hidden="true" size={17} />
+            {t("home.print")}
+          </button>
+        </div>
       </div>
     </div>
   );

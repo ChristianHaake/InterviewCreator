@@ -103,3 +103,9 @@
   color: var(--text);
   border-color: var(--text-muted);
 }
+
+@media print {
+  .footer {
+    display: none;
+  }
+}

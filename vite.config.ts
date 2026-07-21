@@ -11,8 +11,17 @@ export default defineConfig({
       manifest: {
         name: 'InterviewDesigner',
         short_name: 'Interview',
-        description: 'Planungswerkzeug für Interviews',
+        description: 'Planungswerkzeug für Interviews, Debatten, Podcasts oder Unterricht.',
+        lang: 'de',
         theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any',
+          },
+        ],
       }
     })
   ],

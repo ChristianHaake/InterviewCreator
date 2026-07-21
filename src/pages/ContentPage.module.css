@@ -1,4 +1,7 @@
 .container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem 1.5rem;

@@ -5,9 +5,20 @@ import type { InterviewState } from "../../domain/types";
 import { get, set, del } from "idb-keyval";
 import { useTranslation } from "../../i18n";
 
+function withFreshMetadata(state: InterviewState): InterviewState {
+  const allQuestions = [...state.phases.intro, ...state.phases.main, ...state.phases.outro];
+  return {
+    ...state,
+    updated_at: new Date().toISOString(),
+    total_estimated_time: allQuestions.reduce((sum, q) => sum + (q.estimated_minutes ?? 0), 0),
+  };
+}
+
 export function useSessionPersistence() {
   const [state, setState] = useState<InterviewState | null>(null);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const localeRef = useRef(locale);
+  localeRef.current = locale;
 
   useEffect(() => {
     async function load() {
@@ -25,20 +36,21 @@ export function useSessionPersistence() {
           if (result.ok) {
             setState(result.state);
           } else {
-            setState(createDefaultInterviewState());
+            setState(createDefaultInterviewState(localeRef.current));
           }
         } else {
-          setState(createDefaultInterviewState());
+          setState(createDefaultInterviewState(localeRef.current));
         }
       } catch (err) {
         console.error("Failed to load state", err);
-        setState(createDefaultInterviewState());
+        setState(createDefaultInterviewState(localeRef.current));
       }
     }
     load();
   }, []);
 
   const hydratedRef = useRef(false);
+  const dirtyRef = useRef<InterviewState | null>(null);
 
   useEffect(() => {
     if (!state) return;
@@ -46,17 +58,39 @@ export function useSessionPersistence() {
       hydratedRef.current = true;
       return;
     }
+    dirtyRef.current = state;
     const timeout = setTimeout(() => {
-      set(STORAGE_KEY, state).catch(console.error);
+      dirtyRef.current = null;
+      set(STORAGE_KEY, withFreshMetadata(state)).catch(console.error);
     }, 1000);
     return () => clearTimeout(timeout);
   }, [state]);
+
+  // Flush pending edits when the tab is hidden or closed, so the
+  // debounce window cannot swallow the last change.
+  useEffect(() => {
+    function flush() {
+      if (dirtyRef.current) {
+        set(STORAGE_KEY, withFreshMetadata(dirtyRef.current)).catch(console.error);
+        dirtyRef.current = null;
+      }
+    }
+    function onVisibilityChange() {
+      if (document.visibilityState === "hidden") flush();
+    }
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
 
   function clearSession() {
     if (window.confirm(t("home.resetConfirm"))) {
       del(STORAGE_KEY).catch(console.error);
       localStorage.removeItem(STORAGE_KEY);
-      setState(createDefaultInterviewState());
+      setState(createDefaultInterviewState(localeRef.current));
     }
   }
 

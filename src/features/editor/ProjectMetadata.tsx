@@ -14,7 +14,7 @@ export const ProjectMetadata = memo(function ProjectMetadata({ title, partner, o
   const { t } = useTranslation();
   return (
     <div className={styles.metadataPanel}>
-      <h3 className={styles.panelTitle}>{t("editor.metaTitle")}</h3>
+      <h3 className={styles.panelTitle}>{t("editor.metaPanelTitle")}</h3>
       <div className={styles.inputGroup}>
         <label htmlFor="interview-title">{t("editor.metaTitle")}</label>
         <input

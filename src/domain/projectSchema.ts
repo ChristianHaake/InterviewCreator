@@ -57,14 +57,14 @@ function estimatedMinutes(value: unknown) {
   return rounded > 0 ? rounded : undefined;
 }
 
-function parseQuestion(value: unknown, index: number): Question | null {
+function parseQuestion(value: unknown, index: number, idPrefix: string): Question | null {
   if (!isPlainObject(value)) return null;
 
   const text = stringValue(value.text ?? value.question);
   const notes = stringValue(value.notes);
 
   return {
-    id: stableId(value.id, "q", index),
+    id: stableId(value.id, idPrefix, index),
     text,
     notes,
     estimated_minutes: estimatedMinutes(value.estimated_minutes),
@@ -76,12 +76,8 @@ function parseQuestionArray(value: unknown, phase: keyof InterviewPhases): Quest
   if (!Array.isArray(value)) return [];
   return value
     .slice(0, MAX_QUESTIONS_PER_PHASE)
-    .map((item, index) => parseQuestion(item, index))
-    .filter((item): item is Question => item !== null)
-    .map((item, index) => ({
-      ...item,
-      id: item.id || `${phase}-${index + 1}`,
-    }));
+    .map((item, index) => parseQuestion(item, index, phase))
+    .filter((item): item is Question => item !== null);
 }
 
 function parseChecklistItem(value: unknown, index: number): ChecklistItem | null {
@@ -183,4 +179,20 @@ export function parseProjectJson(jsonText: string): ParseProjectResult {
   } catch {
     return { ok: false, reason: "invalid-json" };
   }
+}
+
+export function moveQuestion(
+  phases: InterviewPhases,
+  source: { phase: keyof InterviewPhases; index: number },
+  destination: { phase: keyof InterviewPhases; index: number },
+): InterviewPhases {
+  const next: InterviewPhases = {
+    intro: [...phases.intro],
+    main: [...phases.main],
+    outro: [...phases.outro],
+  };
+  const [moved] = next[source.phase].splice(source.index, 1);
+  if (!moved) return phases;
+  next[destination.phase].splice(destination.index, 0, moved);
+  return next;
 }
