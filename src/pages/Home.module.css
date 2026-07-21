@@ -63,6 +63,30 @@
   font-size: 0.875rem;
 }
 
+.headingActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.templateButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background-color: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.templateButton:hover {
+  border-color: var(--primary);
+}
+
 .iconButton {
   background: none;
   border: none;
@@ -220,10 +244,31 @@
     display: flex;
   }
 
+  /* Let the page grow with its content instead of confining the editor
+     and preview to internal scroll regions inside a locked viewport. */
+  .container {
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .workspace {
+    flex: none;
+  }
+
   .editorPanel,
   .previewPanel {
     display: none;
     max-width: 100%;
+    flex: none;
+  }
+
+  .editorContent {
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .previewStage {
+    overflow: visible;
   }
 
   .mobilePanelActive {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { parseInterviewProject, STORAGE_KEY } from "../../domain/projectSchema";
 import { createDefaultInterviewState } from "../../domain/types";
 import type { InterviewState } from "../../domain/types";
@@ -15,10 +15,15 @@ function withFreshMetadata(state: InterviewState): InterviewState {
 }
 
 export function useSessionPersistence() {
-  const [state, setState] = useState<InterviewState | null>(null);
-  const { t, locale } = useTranslation();
+  const [state, setStateRaw] = useState<InterviewState | null>(null);
+  const { locale } = useTranslation();
   const localeRef = useRef(locale);
   localeRef.current = locale;
+
+  // True while the current project is the untouched auto-generated default,
+  // so switching UI language can re-seed it in the new language.
+  const pristineRef = useRef(false);
+  const prevLocaleRef = useRef(locale);
 
   useEffect(() => {
     async function load() {
@@ -34,19 +39,43 @@ export function useSessionPersistence() {
         if (stored) {
           const result = parseInterviewProject(stored);
           if (result.ok) {
-            setState(result.state);
+            setStateRaw(result.state);
           } else {
-            setState(createDefaultInterviewState(localeRef.current));
+            pristineRef.current = true;
+            setStateRaw(createDefaultInterviewState(localeRef.current));
           }
         } else {
-          setState(createDefaultInterviewState(localeRef.current));
+          pristineRef.current = true;
+          setStateRaw(createDefaultInterviewState(localeRef.current));
         }
       } catch (err) {
         console.error("Failed to load state", err);
-        setState(createDefaultInterviewState(localeRef.current));
+        pristineRef.current = true;
+        setStateRaw(createDefaultInterviewState(localeRef.current));
       }
     }
     load();
+  }, []);
+
+  // Re-seed an untouched default project when the UI language changes, so a
+  // German learner does not get an English sample after switching.
+  useEffect(() => {
+    if (prevLocaleRef.current === locale) return;
+    prevLocaleRef.current = locale;
+    if (pristineRef.current) {
+      setStateRaw(createDefaultInterviewState(locale));
+    }
+  }, [locale]);
+
+  // Any user edit or deliberate project load ends the pristine state.
+  const setState = useCallback((next: InterviewState) => {
+    pristineRef.current = false;
+    setStateRaw(next);
+  }, []);
+
+  const applyProject = useCallback((next: InterviewState) => {
+    pristineRef.current = false;
+    setStateRaw(next);
   }, []);
 
   const hydratedRef = useRef(false);
@@ -86,13 +115,12 @@ export function useSessionPersistence() {
     };
   }, []);
 
-  function clearSession() {
-    if (window.confirm(t("home.resetConfirm"))) {
-      del(STORAGE_KEY).catch(console.error);
-      localStorage.removeItem(STORAGE_KEY);
-      setState(createDefaultInterviewState(localeRef.current));
-    }
-  }
+  const clearSession = useCallback(() => {
+    del(STORAGE_KEY).catch(console.error);
+    localStorage.removeItem(STORAGE_KEY);
+    pristineRef.current = true;
+    setStateRaw(createDefaultInterviewState(localeRef.current));
+  }, []);
 
-  return { state, setState, clearSession };
+  return { state, setState, clearSession, applyProject };
 }

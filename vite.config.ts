@@ -9,9 +9,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'InterviewDesigner',
-        short_name: 'Interview',
-        description: 'Planungswerkzeug für Interviews, Debatten, Podcasts oder Unterricht.',
+        name: 'TalkCreator',
+        short_name: 'TalkCreator',
+        description: 'Planungswerkzeug für strukturierte Gespräche — Interviews, Debatten, Podcasts oder Unterricht.',
         lang: 'de',
         theme_color: '#ffffff',
         icons: [
@@ -34,7 +34,7 @@ export default defineConfig({
             purpose: 'any',
           },
           {
-            src: 'pwa-512x512.png',
+            src: 'pwa-maskable-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
