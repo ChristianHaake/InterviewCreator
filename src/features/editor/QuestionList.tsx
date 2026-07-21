@@ -1,21 +1,24 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import type { Question } from "../../domain/types";
 import { QuestionItem } from "./QuestionItem";
-import { Plus } from "lucide-react";
+import { Lightbulb, Plus } from "lucide-react";
 import styles from "./Editor.module.css";
 import { useTranslation } from "../../i18n";
+import { getImpulses, type PhaseKey } from "../../domain/impulses";
 
 type Props = {
   title: string;
   droppableId: string;
   emptyMessage: string;
+  phaseKey: PhaseKey;
   questions: Question[];
   onChange: (questions: Question[]) => void;
 };
 
-export const QuestionList = memo(function QuestionList({ title, droppableId, emptyMessage, questions, onChange }: Props) {
-  const { t } = useTranslation();
+export const QuestionList = memo(function QuestionList({ title, droppableId, emptyMessage, phaseKey, questions, onChange }: Props) {
+  const { t, locale } = useTranslation();
+  const [showImpulses, setShowImpulses] = useState(false);
 
   const handleUpdate = (id: string, updates: Partial<Question>) => {
     onChange(
@@ -37,20 +40,52 @@ export const QuestionList = memo(function QuestionList({ title, droppableId, emp
     onChange(newQuestions);
   };
 
-  const handleAdd = () => {
+  const handleAdd = (text = "") => {
     const newId = crypto.randomUUID();
-    onChange([...questions, { id: newId, text: "", notes: "", estimated_minutes: 2, is_backup: false } as Question]);
+    onChange([...questions, { id: newId, text, notes: "", estimated_minutes: 2, is_backup: false } as Question]);
   };
+
+  const impulses = getImpulses(locale, phaseKey);
 
   return (
     <div className={styles.questionListPanel}>
       <div className={styles.listHeader}>
         <h3 className={styles.panelTitle}>{title}</h3>
-        <button className={styles.addButton} onClick={handleAdd} type="button">
-          <Plus size={16} />
-          {t("editor.addQuestion")}
-        </button>
+        <div className={styles.listHeaderActions}>
+          <button
+            className={styles.impulseToggle}
+            onClick={() => setShowImpulses((value) => !value)}
+            type="button"
+            aria-expanded={showImpulses}
+          >
+            <Lightbulb size={15} aria-hidden="true" />
+            {t("editor.impulses")}
+          </button>
+          <button className={styles.addButton} onClick={() => handleAdd()} type="button">
+            <Plus size={16} />
+            {t("editor.addQuestion")}
+          </button>
+        </div>
       </div>
+
+      {showImpulses && (
+        <div className={styles.impulsePanel}>
+          <p className={styles.impulseHint}>{t("editor.impulsesHint")}</p>
+          <div className={styles.impulseChips}>
+            {impulses.map((text) => (
+              <button
+                key={text}
+                type="button"
+                className={styles.impulseChip}
+                onClick={() => handleAdd(text)}
+                aria-label={t("editor.impulsesInsert", { text })}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Droppable droppableId={droppableId}>
         {(provided) => (

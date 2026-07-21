@@ -142,6 +142,7 @@ function normalizeProjectShape(input: PlainObject) {
     created_at: isoDateValue(input.created_at, now),
     updated_at: now,
     total_estimated_time: allQuestions.reduce((sum, question) => sum + (question.estimated_minutes ?? 0), 0),
+    target_minutes: estimatedMinutes(input.target_minutes),
     phases,
     checklist: parseChecklist(input.checklist),
     sources: parseSources(input.sources),

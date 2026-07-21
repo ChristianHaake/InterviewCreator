@@ -58,6 +58,9 @@ export const InterviewPreview = memo(function InterviewPreview({ state }: Props)
         {total_estimated_time > 0 && (
           <p className={styles.partner}>
              <strong>{t("preview.totalTime")}</strong> {t("preview.approx")} {total_estimated_time} {t("preview.minutes")}
+             {typeof state.target_minutes === "number" && state.target_minutes > 0 && (
+               <> · {t("budget.target")} {state.target_minutes} {t("budget.minutesShort")}</>
+             )}
           </p>
         )}
       </header>

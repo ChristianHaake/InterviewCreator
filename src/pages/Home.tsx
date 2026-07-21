@@ -1,15 +1,19 @@
 import { useState, useRef } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
-import { FileDown, FileUp, Printer, RotateCcw } from "lucide-react";
+import { FileDown, FileUp, LayoutTemplate, Printer, RotateCcw } from "lucide-react";
 import { useSessionPersistence } from "../shared/hooks/useSessionPersistence";
 import { useProjectStorage } from "../shared/hooks/useProjectStorage";
 import { ProjectMetadata } from "../features/editor/ProjectMetadata";
 import { ChecklistEditor } from "../features/editor/ChecklistEditor";
 import { SourceEditor } from "../features/editor/SourceEditor";
 import { QuestionList } from "../features/editor/QuestionList";
+import { TimeBudget } from "../features/editor/TimeBudget";
+import { TemplatePicker } from "../features/templates/TemplatePicker";
+import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { InterviewPreview } from "../features/preview/InterviewPreview";
 import { moveQuestion } from "../domain/projectSchema";
+import { createProjectFromTemplate, type TemplateId } from "../domain/templates";
 import type { InterviewPhases } from "../domain/types";
 import styles from "./Home.module.css";
 import { useTranslation } from "../i18n";
@@ -21,19 +25,39 @@ const droppablePhase: Record<string, keyof InterviewPhases> = {
 };
 
 export function Home() {
-  const { state, setState, clearSession } = useSessionPersistence();
-  const { t } = useTranslation();
+  const { state, setState, clearSession, applyProject } = useSessionPersistence();
+  const { t, locale } = useTranslation();
 
   const { handleDownload, handleExportMarkdown, handleUpload } = useProjectStorage(state, setState);
   const [mobileView, setMobileView] = useState<"editor" | "preview">("editor");
+  const [resetOpen, setResetOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pendingTemplate, setPendingTemplate] = useState<TemplateId | null>(null);
   const configInputRef = useRef<HTMLInputElement>(null);
 
   if (!state) {
     return <div className={styles.loadingState}>{t("home.loadingProject")}</div>;
   }
 
+  const totalPlanned = [...state.phases.intro, ...state.phases.main, ...state.phases.outro].reduce(
+    (sum, question) => sum + (question.estimated_minutes ?? 0),
+    0,
+  );
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleTemplateChosen = (id: TemplateId) => {
+    setPickerOpen(false);
+    setPendingTemplate(id);
+  };
+
+  const confirmTemplate = () => {
+    if (pendingTemplate) {
+      applyProject(createProjectFromTemplate(pendingTemplate, locale));
+    }
+    setPendingTemplate(null);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -91,15 +115,25 @@ export function Home() {
               <span className={styles.panelKicker}>{t("tab.editor")}</span>
               <h2>{t("home.editorTitle")}</h2>
             </div>
-            <button
-              className={styles.iconButton}
-              onClick={clearSession}
-              title={t("home.resetProject")}
-              type="button"
-            >
-              <RotateCcw aria-hidden="true" size={18} />
-              <span className="visually-hidden">{t("home.resetProject")}</span>
-            </button>
+            <div className={styles.headingActions}>
+              <button
+                className={styles.templateButton}
+                onClick={() => setPickerOpen(true)}
+                type="button"
+              >
+                <LayoutTemplate aria-hidden="true" size={16} />
+                {t("templates.newButton")}
+              </button>
+              <button
+                className={styles.iconButton}
+                onClick={() => setResetOpen(true)}
+                title={t("home.resetProject")}
+                type="button"
+              >
+                <RotateCcw aria-hidden="true" size={18} />
+                <span className="visually-hidden">{t("home.resetProject")}</span>
+              </button>
+            </div>
           </div>
 
           <div className={styles.editorContent}>
@@ -108,6 +142,12 @@ export function Home() {
               partner={state.partner}
               onTitleChange={(value) => setState({ ...state, title: value })}
               onPartnerChange={(value) => setState({ ...state, partner: value })}
+            />
+
+            <TimeBudget
+              planned={totalPlanned}
+              target={state.target_minutes}
+              onTargetChange={(value) => setState({ ...state, target_minutes: value })}
             />
 
             <ChecklistEditor
@@ -120,6 +160,7 @@ export function Home() {
                 title={t("editor.introTitle")}
                 droppableId="intro-list"
                 emptyMessage={t("editor.introEmpty")}
+                phaseKey="intro"
                 questions={state.phases.intro}
                 onChange={(qs) => setState({ ...state, phases: { ...state.phases, intro: qs } })}
               />
@@ -128,6 +169,7 @@ export function Home() {
                 title={t("editor.mainTitle")}
                 droppableId="main-list"
                 emptyMessage={t("editor.mainEmpty")}
+                phaseKey="main"
                 questions={state.phases.main}
                 onChange={(qs) => setState({ ...state, phases: { ...state.phases, main: qs } })}
               />
@@ -136,6 +178,7 @@ export function Home() {
                 title={t("editor.outroTitle")}
                 droppableId="outro-list"
                 emptyMessage={t("editor.outroEmpty")}
+                phaseKey="outro"
                 questions={state.phases.outro}
                 onChange={(qs) => setState({ ...state, phases: { ...state.phases, outro: qs } })}
               />
@@ -218,6 +261,34 @@ export function Home() {
           </button>
         </div>
       </div>
+
+      {pickerOpen && (
+        <TemplatePicker onSelect={handleTemplateChosen} onClose={() => setPickerOpen(false)} />
+      )}
+
+      {pendingTemplate && (
+        <ConfirmDialog
+          title={t("templates.overwriteTitle")}
+          message={t("templates.overwriteMessage")}
+          confirmLabel={t("templates.overwriteConfirm")}
+          onConfirm={confirmTemplate}
+          onCancel={() => setPendingTemplate(null)}
+        />
+      )}
+
+      {resetOpen && (
+        <ConfirmDialog
+          title={t("home.resetTitle")}
+          message={t("home.resetConfirm")}
+          confirmLabel={t("home.resetConfirmButton")}
+          danger
+          onConfirm={() => {
+            clearSession();
+            setResetOpen(false);
+          }}
+          onCancel={() => setResetOpen(false)}
+        />
+      )}
     </div>
   );
 }
