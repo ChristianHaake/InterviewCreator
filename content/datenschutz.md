@@ -1,48 +1,49 @@
-# Datenschutz
+# Datenschutzhinweise
 
-Stand: 2026-06-30
+Stand: 2026-07-21
 
-> Vorlage: Dieser Text muss an die tatsächliche Anwendung und das konkrete
-> Hosting angepasst und vor Veröffentlichung durch den Betreiber geprüft
-> werden.
+Diese Software ist ein Open-Source-Projekt für den Einsatz im Bildungsbereich.
+
+Der Schutz deiner Daten hat hohe Priorität. InterviewDesigner verarbeitet deine Eingaben lokal im Browser und überträgt sie nicht an den Betreiber oder an Drittserver.
 
 ## Verantwortlicher
 
-Christian Haake
+Christian Haake  
+Alte Ziegelei 7  
+26197 Großenkneten  
+Deutschland
 
-Christian Haake Adresse
+E-Mail: christianhaake@gmail.com
 
-E-Mail: christian.haake@example.com
+## 1. Lokale Speicherung
 
-## Hosting
+Alle Inhalte, die du in InterviewDesigner eingibst (Projekttitel, Fragen, Notizen, Checklisten, Quellen), verbleiben lokal auf deinem Gerät. Es gibt keine Datenbank für Nutzerinhalte, keine Benutzerkonten und keinen Upload deiner Inhalte an den Betreiber.
 
-Die Anwendung wird über Cloudflare Pages bereitgestellt. Beim Aufruf
-verarbeitet der Hosting-Anbieter technisch erforderliche Verbindungsdaten,
-beispielsweise IP-Adresse, Zeitpunkt, angeforderte Datei und Browserangaben.
+Die Speicherung erfolgt über folgende Browser-Technologien:
 
-Ergänze Rechtsgrundlage, Speicherdauer, Auftragsverarbeitung und einen Link zur
-Datenschutzerklärung des Hosting-Anbieters.
+- **IndexedDB** (Eintrag `interview-creator-session`): dein aktuelles Projekt, damit es beim nächsten Besuch wieder verfügbar ist.
+- **LocalStorage** (Eintrag `interview-creator-locale`): deine gewählte Sprache. Ältere Projektstände unter dem Eintrag `interview-creator-session` werden beim ersten Laden übernommen.
+- **Service-Worker-Cache**: technische Dateien der App (HTML, CSS, JavaScript), damit die App auch offline funktioniert. Dieser Cache enthält keine von dir eingegebenen Inhalte.
 
-## Verarbeitung von Inhalten
+## 2. Löschung deiner Daten
 
-Beschreibe exakt, ob eingegebene Texte und hochgeladene Dateien ausschließlich
-im Browser verarbeitet werden oder das Gerät verlassen.
+Du kannst deine Daten jederzeit selbst löschen:
 
-## Lokale Speicherung
+- Über den Button **„Projekt zurücksetzen“** im Editor wird das aktuelle Projekt gelöscht und durch ein Beispielprojekt ersetzt.
+- Wenn du in deinem Browser die Websitedaten dieser Seite löschst (Cookies/Websitedaten bzw. „Browserdaten löschen“), werden alle lokal gespeicherten Daten von InterviewDesigner restlos entfernt.
 
-Liste alle verwendeten `localStorage`- und IndexedDB-Einträge mit Zweck und
-Löschmöglichkeit auf.
+## 3. Keine Cookies und kein Tracking
 
-## Cookies und Analyse
+Wir setzen keine Cookies ein. Es werden keine Web-Analyse-Tools (wie z. B. Google Analytics) verwendet. Wir zeichnen dein Nutzerverhalten nicht auf.
 
-Dokumentiere Cookies, Hosting-Analyse und weitere Dienste. Falls keine
-eingesetzt werden, sage dies nur, wenn es durch die Produktion geprüft wurde.
+## 4. Projektdateien (Speichern / Laden / Export)
 
-## Löschung
+Beim Speichern oder Exportieren erzeugt die App eine Datei (JSON oder Markdown) direkt in deinem Browser und bietet sie als Download an. Beim Laden wird die Datei ausschließlich lokal in deinem Browser gelesen. In beiden Fällen findet keine Übertragung an einen Server statt.
 
-Erkläre, wie Nutzer lokal gespeicherte Daten löschen können.
+## 5. Webhosting
 
-## Rechte betroffener Personen
+Die Bereitstellung der statischen Website erfolgt über Cloudflare Pages. Bei der reinen Auslieferung der Dateien (HTML, CSS, JS) werden vom Hosting-Provider üblicherweise Verbindungsdaten (wie IP-Adresse, Datum und Uhrzeit des Zugriffs) kurzfristig in Logfiles gespeichert, um die technische Sicherheit zu gewährleisten. Wir haben keinen Zugriff auf diese Logfiles. Weitere Informationen findest du in der Datenschutzerklärung von Cloudflare: https://www.cloudflare.com/privacypolicy/
 
-Ergänze die erforderlichen Informationen zu Auskunft, Berichtigung, Löschung,
-Einschränkung, Widerspruch und Beschwerderecht.
+## 6. Deine Rechte
+
+Da InterviewDesigner selbst keine personenbezogenen Daten erhebt oder speichert, liegen beim Betreiber keine Daten über dich vor, die beauskunftet, berichtigt oder gelöscht werden könnten. Unabhängig davon hast du nach der DSGVO grundsätzlich das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde. Bei Fragen wende dich an die oben genannte Kontaktadresse.

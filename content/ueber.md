@@ -2,11 +2,11 @@
 
 ## Zweck
 
-Beschreibe den Bildungszweck und die Zielgruppe.
+**InterviewDesigner** ist ein Open-Source-Projekt für den Bildungsbereich. Es unterstützt Schüler:innen, Studierende, Lehrkräfte und Medienschaffende dabei, Gespräche vorzubereiten: Interviews für Podcasts oder Reportagen, Debatten, Unterrichtsgespräche oder Projektpräsentationen. Ein klar strukturierter Leitfaden mit Zeitplanung, Checkliste und Quellen macht die Gesprächsvorbereitung greifbar.
 
 ## Funktionsweise
 
-Erkläre die wichtigsten Funktionen und die lokale Verarbeitung.
+InterviewDesigner läuft vollständig lokal in deinem Browser. Es gibt keine Anmeldung, keine Benutzerkonten und keine Server-Kommunikation. Dein Projekt wird lokal in deinem Browser gespeichert. Du kannst es jederzeit als Datei exportieren (Speichern), wieder importieren (Laden) oder als Leitfaden drucken.
 
 ## Open Source
 
@@ -16,4 +16,5 @@ Die Software steht unter der GNU General Public License v3.0 only.
 
 ## Verantwortlich
 
-Ergänze Projektverantwortung und Kontakt.
+Christian Haake  
+https://github.com/ChristianHaake
