@@ -1,4 +1,4 @@
-InterviewDesigner
+TalkCreator
 
 Kurzbeschreibung
 

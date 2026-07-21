@@ -4,7 +4,7 @@ Stand: 2026-07-21
 
 Diese Software ist ein Open-Source-Projekt für den Einsatz im Bildungsbereich.
 
-Der Schutz deiner Daten hat hohe Priorität. InterviewDesigner verarbeitet deine Eingaben lokal im Browser und überträgt sie nicht an den Betreiber oder an Drittserver.
+Der Schutz deiner Daten hat hohe Priorität. TalkCreator verarbeitet deine Eingaben lokal im Browser und überträgt sie nicht an den Betreiber oder an Drittserver.
 
 ## Verantwortlicher
 
@@ -17,7 +17,7 @@ E-Mail: christianhaake@gmail.com
 
 ## 1. Lokale Speicherung
 
-Alle Inhalte, die du in InterviewDesigner eingibst (Projekttitel, Fragen, Notizen, Checklisten, Quellen), verbleiben lokal auf deinem Gerät. Es gibt keine Datenbank für Nutzerinhalte, keine Benutzerkonten und keinen Upload deiner Inhalte an den Betreiber.
+Alle Inhalte, die du in TalkCreator eingibst (Projekttitel, Fragen, Notizen, Checklisten, Quellen), verbleiben lokal auf deinem Gerät. Es gibt keine Datenbank für Nutzerinhalte, keine Benutzerkonten und keinen Upload deiner Inhalte an den Betreiber.
 
 Die Speicherung erfolgt über folgende Browser-Technologien:
 
@@ -30,7 +30,7 @@ Die Speicherung erfolgt über folgende Browser-Technologien:
 Du kannst deine Daten jederzeit selbst löschen:
 
 - Über den Button **„Projekt zurücksetzen“** im Editor wird das aktuelle Projekt gelöscht und durch ein Beispielprojekt ersetzt.
-- Wenn du in deinem Browser die Websitedaten dieser Seite löschst (Cookies/Websitedaten bzw. „Browserdaten löschen“), werden alle lokal gespeicherten Daten von InterviewDesigner restlos entfernt.
+- Wenn du in deinem Browser die Websitedaten dieser Seite löschst (Cookies/Websitedaten bzw. „Browserdaten löschen“), werden alle lokal gespeicherten Daten von TalkCreator restlos entfernt.
 
 ## 3. Keine Cookies und kein Tracking
 
@@ -46,4 +46,4 @@ Die Bereitstellung der statischen Website erfolgt über Cloudflare Pages. Bei de
 
 ## 6. Deine Rechte
 
-Da InterviewDesigner selbst keine personenbezogenen Daten erhebt oder speichert, liegen beim Betreiber keine Daten über dich vor, die beauskunftet, berichtigt oder gelöscht werden könnten. Unabhängig davon hast du nach der DSGVO grundsätzlich das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde. Bei Fragen wende dich an die oben genannte Kontaktadresse.
+Da TalkCreator selbst keine personenbezogenen Daten erhebt oder speichert, liegen beim Betreiber keine Daten über dich vor, die beauskunftet, berichtigt oder gelöscht werden könnten. Unabhängig davon hast du nach der DSGVO grundsätzlich das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde. Bei Fragen wende dich an die oben genannte Kontaktadresse.

@@ -1,25 +1,25 @@
-# InterviewDesigner
+# TalkCreator
 
-Planungswerkzeug fuer Interviews im Rahmen von Podcasts, Reportagen oder Projektarbeiten.
+Planungswerkzeug fuer strukturierte Gespraeche — Interviews, Debatten, Podcasts oder Unterricht.
 
-Live application: [https://interviewdesigner.haak3.de](https://interviewdesigner.haak3.de)
+Live application: [https://talkcreator.haak3.de](https://talkcreator.haak3.de) (Rename ausstehend; Cloudflare-Projekt derzeit `interviewdesigner`)
 
 ## Purpose
 
-InterviewDesigner ist eine React-basierte Webanwendung, mit der Schuelerinnen und Schueler sowie Lehrkraefte Interviews strukturiert vorbereiten koennen.
+TalkCreator ist eine React-basierte Webanwendung, mit der Schuelerinnen und Schueler sowie Lehrkraefte strukturierte Gespraeche vorbereiten koennen: Einstieg, Hauptteil und Schluss mit Zeitbudget, Checkliste und Quellen, am Ende ausgedruckt als Leitfaden.
 
 Zielgruppen:
 
 - Schuelerinnen und Schueler
 - Lehrkraefte
+- Medienschaffende
 
 Einsatzszenarien:
 
-- Podcasts
-- Reportagen
-- Zeitzeugeninterviews
-- Expertenbefragungen
-- Forschendes Lernen
+- Interviews (Podcasts, Reportagen, Zeitzeugen, Expert:innen)
+- Debatten und Diskussionen
+- Unterrichtsgespraeche und forschendes Lernen
+- Pitches und Projektpraesentationen
 
 ## Features
 

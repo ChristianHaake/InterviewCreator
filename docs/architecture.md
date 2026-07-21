@@ -2,8 +2,8 @@
 
 ## Product
 
-- App: `InterviewDesigner`
-- Live URL: `https://interviewdesigner.haak3.de`
+- App: `TalkCreator`
+- Live URL: `https://talkcreator.haak3.de` (rename pending; Cloudflare project still `interviewdesigner`)
 - Repository: `https://github.com/ChristianHaake/InterviewCreator`
 - Intended users: `Schülerinnen und Schüler, Lehrkräfte`
 

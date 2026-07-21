@@ -27,9 +27,9 @@ https://github.com/ChristianHaake/haak3-webapp-standard
 
 ## App-specific rules
 
-- App name: `InterviewDesigner`
-- Live URL: `https://interviewdesigner.haak3.de`
-- Repository: `https://github.com/ChristianHaake/InterviewCreator`
+- App name: `TalkCreator` (planning tool for structured talks: interviews, debates, podcasts, lessons)
+- Live URL: `https://talkcreator.haak3.de` (rename pending — DNS/Cloudflare project still named `interviewdesigner`)
+- Repository: `https://github.com/ChristianHaake/InterviewCreator` (repo not renamed)
 - Add further project-specific instructions here.
 
 ## Verification

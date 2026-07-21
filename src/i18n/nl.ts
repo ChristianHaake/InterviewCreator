@@ -1,5 +1,5 @@
 export const nl = {
-  "app.title": "InterviewDesigner",
+  "app.title": "TalkCreator",
   "app.metaDescription": "Planningstool voor interviews, debatten, podcasts of lessen.",
   "tab.editor": "Editor",
   "tab.preview": "Voorbeeld",

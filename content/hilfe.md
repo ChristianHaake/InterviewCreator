@@ -1,8 +1,8 @@
 # Hilfe
 
-## Was macht InterviewDesigner?
+## Was macht TalkCreator?
 
-InterviewDesigner hilft dir, Gesprächsleitfäden zu planen — für Interviews, Podcasts, Debatten oder Unterrichtsgespräche. Du strukturierst dein Gespräch in drei Phasen (Einstieg, Hauptteil, Abschluss), ergänzt eine Vorbereitungs-Checkliste und Quellen und druckst am Ende einen übersichtlichen Leitfaden aus.
+TalkCreator hilft dir, Gesprächsleitfäden zu planen — für Interviews, Podcasts, Debatten oder Unterrichtsgespräche. Du strukturierst dein Gespräch in drei Phasen (Einstieg, Hauptteil, Abschluss), ergänzt eine Vorbereitungs-Checkliste und Quellen und druckst am Ende einen übersichtlichen Leitfaden aus.
 
 ## Schnellstart
 

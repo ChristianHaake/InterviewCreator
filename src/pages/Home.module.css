@@ -220,10 +220,31 @@
     display: flex;
   }
 
+  /* Let the page grow with its content instead of confining the editor
+     and preview to internal scroll regions inside a locked viewport. */
+  .container {
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .workspace {
+    flex: none;
+  }
+
   .editorPanel,
   .previewPanel {
     display: none;
     max-width: 100%;
+    flex: none;
+  }
+
+  .editorContent {
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .previewStage {
+    overflow: visible;
   }
 
   .mobilePanelActive {
