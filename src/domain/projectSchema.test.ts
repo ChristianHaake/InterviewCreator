@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   MAX_CHECKLIST_ITEMS,
   MAX_QUESTIONS_PER_PHASE,
+  moveQuestion,
   parseInterviewProject,
   parseProjectJson,
   PROJECT_SCHEMA_VERSION,
 } from "./projectSchema";
+import type { InterviewPhases, Question } from "./types";
 
 describe("project schema", () => {
   it("accepts and normalizes a current project file", () => {
@@ -88,5 +90,43 @@ describe("project schema", () => {
     if (!result.ok) return;
     expect(result.state.phases.intro).toHaveLength(MAX_QUESTIONS_PER_PHASE);
     expect(result.state.checklist).toHaveLength(MAX_CHECKLIST_ITEMS);
+  });
+});
+
+describe("moveQuestion", () => {
+  const question = (id: string): Question => ({ id, text: id, notes: "" });
+  const phases = (): InterviewPhases => ({
+    intro: [question("i-1")],
+    main: [question("m-1"), question("m-2")],
+    outro: [],
+  });
+
+  it("reorders within a phase", () => {
+    const result = moveQuestion(phases(), { phase: "main", index: 0 }, { phase: "main", index: 1 });
+    expect(result.main.map((q) => q.id)).toEqual(["m-2", "m-1"]);
+  });
+
+  it("moves a question between phases", () => {
+    const result = moveQuestion(phases(), { phase: "main", index: 0 }, { phase: "intro", index: 0 });
+    expect(result.intro.map((q) => q.id)).toEqual(["m-1", "i-1"]);
+    expect(result.main.map((q) => q.id)).toEqual(["m-2"]);
+  });
+
+  it("moves into an empty phase", () => {
+    const result = moveQuestion(phases(), { phase: "intro", index: 0 }, { phase: "outro", index: 0 });
+    expect(result.intro).toHaveLength(0);
+    expect(result.outro.map((q) => q.id)).toEqual(["i-1"]);
+  });
+
+  it("returns the input unchanged for an out-of-range source", () => {
+    const input = phases();
+    expect(moveQuestion(input, { phase: "outro", index: 0 }, { phase: "main", index: 0 })).toBe(input);
+  });
+
+  it("does not mutate the input", () => {
+    const input = phases();
+    moveQuestion(input, { phase: "main", index: 0 }, { phase: "intro", index: 0 });
+    expect(input.main.map((q) => q.id)).toEqual(["m-1", "m-2"]);
+    expect(input.intro.map((q) => q.id)).toEqual(["i-1"]);
   });
 });

@@ -1,12 +1,12 @@
 .container {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
-  height: 100%;
 }
 
 .loadingState {
@@ -20,8 +20,8 @@
 .workspace {
   display: flex;
   flex: 1;
+  min-height: 0;
   gap: 2rem;
-  height: 100%;
 }
 
 .editorPanel,
@@ -127,6 +127,7 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  flex-shrink: 0;
 }
 
 .actionGroup {
@@ -237,5 +238,38 @@
 
   .actionGroup {
     justify-content: space-between;
+  }
+}
+
+/* Print: only the interview sheet, full length */
+@media print {
+  .container {
+    padding: 0;
+    max-width: none;
+    display: block;
+  }
+
+  .workspace {
+    display: block;
+  }
+
+  .mobileViewToggle,
+  .editorPanel,
+  .actionBar,
+  .panelHeading {
+    display: none !important;
+  }
+
+  .previewPanel {
+    display: block !important;
+    max-width: 100%;
+  }
+
+  .previewStage {
+    overflow: visible;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 0;
+    padding: 0;
   }
 }

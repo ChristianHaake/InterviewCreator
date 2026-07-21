@@ -122,3 +122,9 @@
   background-color: var(--primary);
   color: white;
 }
+
+@media print {
+  .header {
+    display: none;
+  }
+}

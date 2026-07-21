@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, GripVertical, Trash2 } from "lucide-react";
 import { memo } from "react";
 import type { ChangeEvent } from "react";
 import type { Question } from "../../domain/types";
+import { MAX_ESTIMATED_MINUTES } from "../../domain/projectSchema";
 import styles from "./Editor.module.css";
 import { useTranslation } from "../../i18n";
 
@@ -71,10 +72,18 @@ export const QuestionItem = memo(function QuestionItem({
                 <input
                   type="number"
                   id={`question-time-${question.id}`}
-                  value={question.estimated_minutes || ""}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => onUpdate({ estimated_minutes: e.target.value ? parseInt(e.target.value, 10) : undefined })}
+                  value={question.estimated_minutes ?? ""}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const parsed = parseInt(e.target.value, 10);
+                    onUpdate({
+                      estimated_minutes: Number.isNaN(parsed)
+                        ? undefined
+                        : Math.max(1, Math.min(MAX_ESTIMATED_MINUTES, parsed)),
+                    });
+                  }}
                   placeholder="2"
                   min="1"
+                  max={MAX_ESTIMATED_MINUTES}
                   className={styles.input}
                 />
               </div>

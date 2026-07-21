@@ -1,6 +1,5 @@
 import { memo } from "react";
-import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import type { DropResult } from "@hello-pangea/dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import type { Question } from "../../domain/types";
 import { QuestionItem } from "./QuestionItem";
 import { Plus } from "lucide-react";
@@ -17,21 +16,6 @@ type Props = {
 
 export const QuestionList = memo(function QuestionList({ title, droppableId, emptyMessage, questions, onChange }: Props) {
   const { t } = useTranslation();
-  
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-
-    if (sourceIndex === destinationIndex) return;
-
-    const newQuestions = Array.from(questions);
-    const [moved] = newQuestions.splice(sourceIndex, 1);
-    newQuestions.splice(destinationIndex, 0, moved);
-
-    onChange(newQuestions);
-  };
 
   const handleUpdate = (id: string, updates: Partial<Question>) => {
     onChange(
@@ -68,35 +52,33 @@ export const QuestionList = memo(function QuestionList({ title, droppableId, emp
         </button>
       </div>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId={droppableId}>
-          {(provided) => (
-            <div
-              className={styles.listContainer}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {questions.length === 0 && (
-                <p className={styles.emptyText}>{emptyMessage}</p>
-              )}
-              {questions.map((q, index) => (
-                <QuestionItem
-                  key={q.id}
-                  question={q}
-                  index={index}
-                  onUpdate={(updates) => handleUpdate(q.id, updates)}
-                  onDelete={() => handleDelete(q.id)}
-                  onMoveUp={() => handleMove(index, -1)}
-                  onMoveDown={() => handleMove(index, 1)}
-                  canMoveUp={index > 0}
-                  canMoveDown={index < questions.length - 1}
-                />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Droppable droppableId={droppableId}>
+        {(provided) => (
+          <div
+            className={styles.listContainer}
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
+            {questions.length === 0 && (
+              <p className={styles.emptyText}>{emptyMessage}</p>
+            )}
+            {questions.map((q, index) => (
+              <QuestionItem
+                key={q.id}
+                question={q}
+                index={index}
+                onUpdate={(updates) => handleUpdate(q.id, updates)}
+                onDelete={() => handleDelete(q.id)}
+                onMoveUp={() => handleMove(index, -1)}
+                onMoveDown={() => handleMove(index, 1)}
+                canMoveUp={index > 0}
+                canMoveDown={index < questions.length - 1}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   );
 });
